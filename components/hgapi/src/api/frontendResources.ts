@@ -29,7 +29,7 @@ export function frontendResources(app: Express, config: APIConfig) {
     });
 
     config.websockets.set("/socket/mapstatus", new Set);
-    // @ts-expect-error
+    // @ts-expect-error — express-ws adds the .ws handler to the Express application type.
     app.ws("/socket/mapstatus", (ws: ws, req: Request) => {
         const uuid = v4();
         console.log(`/socket/mapstatus/ <> ${uuid}`);
