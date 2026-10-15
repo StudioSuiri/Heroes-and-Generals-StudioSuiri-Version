@@ -41,6 +41,8 @@ These public repositories do not establish availability of the current HnG Group
 - Each addition was committed on `audit/consolidate-hng-sources`; no changes were force-pushed to the upstream authors' repositories.
 - Build/tests are not verified: this runtime couldn't resolve `github.com` for a local clone, so no claim of compilation success is made.
 
+See [RECONSTRUCTION_MATRIX.md](RECONSTRUCTION_MATRIX.md) for a per-subsystem present/missing table and [hng-audit-validation.yml](../.github/workflows/hng-audit-validation.yml) for the build/test workflow. The workflow is configured but has not been verified as passing yet.
+
 ## Consolidation policy
 
 - Preserve original upstream links and commit IDs.
