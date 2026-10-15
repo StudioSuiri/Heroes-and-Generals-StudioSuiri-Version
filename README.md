@@ -4,15 +4,15 @@ This repository consolidates **public, community-authored research and tooling**
 
 ## Status
 
-This is an **initial source consolidation / audit branch**, not a release. The original project is preserved in the repository root. Related repositories are being brought into distinct component folders so provenance, licenses, runtime requirements, and gaps remain visible.
+This is an **initial source consolidation / audit branch**, not a release. The original project is preserved in the repository root. Related sources have been imported into distinct component folders on the `audit/consolidate-hng-sources` branch so provenance, licenses, runtime requirements, and gaps remain visible.
 
 ### Components
 
 | Path | Role | Upstream | License observed upstream | Status |
 |---|---|---|---|---|
 | Root packages / `packages/*` | Heroes & Generals Community Project (HAGCP): TypeScript packages, assets/templates, client protocol definitions, TCP socket/protocol tooling, map utilities, and a limited experimental server implementation | [raouldeheer/Heroes-and-Generals-community-project](https://github.com/raouldeheer/Heroes-and-Generals-community-project) | MIT | Historical snapshot; needs build and runtime validation |
-| `components/hgapi/` | Warmap API and service that consumes the HAGCP network client and assets packages | [raouldeheer/hgapi](https://github.com/raouldeheer/hgapi) | MIT | Consolidation in progress; historically relied on a live HQ endpoint and published HAGCP packages |
-| `components/legacy-private-launcher/` | Historical Windows Forms launcher for an old private-server experiment | [l4v4ph0x/priv8hng_sisvalid](https://github.com/l4v4ph0x/priv8hng_sisvalid) | GPL-3.0 | Archival source only; not a modern dedicated server |
+| `components/hgapi/` | Warmap API and service that consumes the HAGCP network client and assets packages | [raouldeheer/hgapi](https://github.com/raouldeheer/hgapi) | MIT | Source, manifests, license and component README imported; build not yet verified |
+| `components/legacy-private-launcher/` | Historical Windows Forms launcher for an old private-server experiment | [l4v4ph0x/priv8hng_sisvalid](https://github.com/l4v4ph0x/priv8hng_sisvalid) | GPL-3.0 | Source-only archival subset imported; binaries/caches excluded; not a modern dedicated server |
 
 ## Important technical distinction
 
