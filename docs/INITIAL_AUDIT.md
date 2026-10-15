@@ -54,3 +54,27 @@ See [RECONSTRUCTION_MATRIX.md](RECONSTRUCTION_MATRIX.md) for a per-subsystem pre
 - Do not copy binary builds, IDE cache, old downloaded game files or private user data.
 - Do not combine proprietary game assets into the MIT/GPL licensing claims.
 - Treat the one-time green run as a source/build baseline only, not proof of modern-client compatibility, security, or production readiness. Future tests are local by default.
+
+
+## Native reimplementation — second audit phase (2026-10-14)
+
+The project direction is now a clean-room, native standalone game rather than an attempt to make the historic backend production-ready.
+
+### Chosen baseline
+- C++20 shared gameplay/protocol core.
+- SDL3 desktop client; no Flash, browser, HTML overlay, Electron or Tauri.
+- Headless UDP server on Linux, with the same code also buildable on Windows.
+- Explicit versioned binary protocol, fixed-step authoritative simulation and local CTest target.
+- Generic geometric placeholders first; no proprietary game art/audio imported.
+- CMake build presets and PowerShell/Bash helper scripts for local checks, builds and staging.
+- No GitHub Actions workflow files; local-only validation is the required policy.
+
+### Source scaffold and known gap
+The initial native scaffold adds packet framing/validation, a simple world snapshot, movement, aim, hitscan damage, health, death/respawn and one capture zone. It also includes client/server entrypoints and core tests for serialization, movement, capture, combat and capacity. The client currently draws a top-down greybox arena; it is a development harness, not yet a finished first-person shooter.
+
+**Native status: not yet built or tested.** The next designated agent must compile and run CTest locally on Linux and Windows and return full output. Do not claim success before that happens. Build outputs stay in ignored build/ and no remote test jobs are allowed.
+
+### What remains out of scope
+Collision/cover, first-person camera, ammunition/reload, weapon data, objective modes and match timers, spawn selection/tickets, vehicles, native campaign map, assault teams, profiles/persistence, progression/economy, sound/animation, secure authentication, anti-cheat and public-hosting hardening.
+
+See [NATIVE_DESIGN.md](NATIVE_DESIGN.md), [MECHANICS_CATALOG.md](MECHANICS_CATALOG.md), [REBUILD_ROADMAP.md](REBUILD_ROADMAP.md), and [NODE_AGENT_HANDOFF.md](NODE_AGENT_HANDOFF.md) for design, mechanics and acceptance path.

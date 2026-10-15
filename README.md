@@ -1,6 +1,6 @@
 # Heroes & Generals — Community Research Monorepo
 
-This repository consolidates **public, community-authored research and tooling** related to Heroes & Generals. It is not an official Reto-Moto/TLM source release, and it does not contain a verified complete implementation of the modern game backend.
+This repository combines public Heroes & Generals research with an active clean-room native reimplementation scaffold. It is not an official Reto-Moto/TLM source release and does not contain a verified complete implementation of the modern game backend.
 
 ## Status
 
@@ -21,6 +21,20 @@ The HAGCP root includes a **network client/protocol model** and a file named `pa
 The warmap API (`components/hgapi`) is a companion API and map/war-state viewer service. It is not the complete FPS simulation server. The old `priv8hng_sisvalid` repository is a 2016–2018-era launcher project, not the modern HnG 2023 restoration backend.
 
 **Nothing in this monorepo proves that the private Patreon-maintained modern server source is included.** We must not claim compatibility with current HnG Group servers until tested against the exact client/server version and with permission from the maintainers where required.
+
+## Active development path: native standalone game
+
+The active implementation target is HnG Native: a shared C++20 gameplay/protocol core, a standalone SDL3 desktop client, and a headless server that builds on Linux or Windows. The old Flash/browser surface and historical wire protocol are not part of the new runtime.
+
+- Native architecture: docs/NATIVE_DESIGN.md
+- Historical mechanics and simplification map: docs/MECHANICS_CATALOG.md
+- Ordered implementation roadmap: docs/REBUILD_ROADMAP.md
+- Native source and local builds: native/README.md
+- Protocol v1: native/PROTOCOL_V1.md
+- Local-only testing policy: docs/LOCAL_TESTING_POLICY.md
+- Windows/Linux agent handoff: docs/NODE_AGENT_HANDOFF.md
+
+Phase-0 source scaffold now includes a UDP protocol codec, server-authoritative greybox simulation, hitscan damage, respawn, one capture zone, native renderer/client, headless server and dependency-free local test target. **The new native code has not yet been compiled or tested in this session.** The next agent must run local builds/tests on the two nodes and report evidence; no cloud workflows are used.
 
 ## Audit and validation
 

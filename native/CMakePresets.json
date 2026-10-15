@@ -1,0 +1,55 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 25, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "linux-server",
+      "displayName": "Linux headless server + local tests",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../build/linux-server",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "HNG_BUILD_CLIENT": "OFF",
+        "HNG_BUILD_SERVER": "ON",
+        "HNG_BUILD_TESTS": "ON",
+        "HNG_FETCH_SDL3": "OFF"
+      }
+    },
+    {
+      "name": "linux-client",
+      "displayName": "Linux standalone client + server + local tests",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/../build/linux-client",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+        "HNG_BUILD_CLIENT": "ON",
+        "HNG_BUILD_SERVER": "ON",
+        "HNG_BUILD_TESTS": "ON",
+        "HNG_FETCH_SDL3": "ON"
+      }
+    },
+    {
+      "name": "windows-client",
+      "displayName": "Windows x64 standalone client + server + local tests",
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "binaryDir": "${sourceDir}/../build/windows-client",
+      "cacheVariables": {
+        "HNG_BUILD_CLIENT": "ON",
+        "HNG_BUILD_SERVER": "ON",
+        "HNG_BUILD_TESTS": "ON",
+        "HNG_FETCH_SDL3": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "linux-server", "configurePreset": "linux-server" },
+    { "name": "linux-client", "configurePreset": "linux-client" },
+    { "name": "windows-client", "configurePreset": "windows-client", "configuration": "Release" }
+  ],
+  "testPresets": [
+    { "name": "linux-server", "configurePreset": "linux-server", "output": { "outputOnFailure": true } },
+    { "name": "linux-client", "configurePreset": "linux-client", "output": { "outputOnFailure": true } },
+    { "name": "windows-client", "configurePreset": "windows-client", "configuration": "Release", "output": { "outputOnFailure": true } }
+  ]
+}
