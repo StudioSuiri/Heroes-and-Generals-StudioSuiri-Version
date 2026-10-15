@@ -95,7 +95,7 @@ export async function startApp(datastore: DataStore, lookupFactions: Map<string,
             hglogMissionDetails(input, `${Date.now()-t1}ms`);
             return data;
         }),
-        endpoint: () => {},
+        endpoint: () => undefined,
     }));
 
     return app;
