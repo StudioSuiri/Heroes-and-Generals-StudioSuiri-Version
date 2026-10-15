@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ROOT="$(cd "$(dirname "$BASH_SOURCE[0]")/../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 BUILD="$ROOT/build/linux-client"
 command -v cmake >/dev/null || { echo "Missing CMake 3.25+." >&2; exit 2; }
 command -v ninja >/dev/null || { echo "Missing Ninja." >&2; exit 2; }

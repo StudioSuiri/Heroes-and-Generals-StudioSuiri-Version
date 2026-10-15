@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ROOT="$(cd "$(dirname "$BASH_SOURCE[0]")/../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 BUILD="$ROOT/build/linux-server"
 STAGE="$ROOT/build/stage/linux-server"
 "$ROOT/scripts/dev/build-linux-server.sh"
