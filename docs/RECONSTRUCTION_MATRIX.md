@@ -20,7 +20,7 @@ This matrix separates evidence in the public forks from assumptions about the mo
 | Real-time FPS battle simulation / dedicated game server | No complete source established by these three repositories | Missing / unproven | This is the biggest gap. Protocol schemas do not implement physics, weapons, hit validation, replication or game simulation. |
 | Launcher / client bootstrap | Historical 2016–2018 C# Windows Forms launcher | Legacy only | Depends on an old client and hard-coded download host. Some resource files are intentionally omitted; this archival component is not a reproducible build. |
 | Anti-cheat and moderation | No complete implementation established by these forks | Missing / unproven | Required before public operation; use server-side validation and an abuse/reporting model. |
-| Build and automated tests | Network packet/connection tests exist; hgapi test script is a placeholder | Not yet validated here | CI workflow added to compile/test HAGCP and compile hgapi; its run result should be consulted before declaring build health. |
+| Build and automated tests | Network packet/connection tests exist; hgapi test script is a placeholder | One-time Node 18 build/test baseline passed | HAGCP install, build, tests and lint passed once; hgapi compiled once. Automatic test workflows were removed to honor local-only testing. Re-run locally after changes. |
 
 ## Can these repositories reconstruct a playable private server?
 
@@ -30,10 +30,10 @@ The most promising incremental target is the **strategic/war-map slice**: run lo
 
 ## Suggested execution order
 
-1. Make builds deterministic and run CI; catalogue every failing test and obsolete dependency.
+1. Make builds deterministic and run tests locally; catalogue every failing test and obsolete dependency.
 2. Put historical endpoint URLs behind explicit configuration, defaulting to no network access in tests.
 3. Add protocol test fixtures for login challenge, state subscription, map changes, reconnects and version mismatch.
-4. Rebuild the warmap API against local workspace packages or pin its package dependencies to the exact audited source commits. Keep it separated from the authoritative game server.
+4. Rebuild the warmap API against local workspace packages or pin its package dependencies to the exact audited source commits. Keep it separated from the authoritative game server. Validate locally.
 5. Produce an interface/service gap list for authentication, accounts, persistence, matchmaking and battle hosting.
 6. Only after confirming lawful access to the necessary client/game assets and server behavior should the team decide between contributing to the existing restoration and writing a clean-room compatible implementation.
 

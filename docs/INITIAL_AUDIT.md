@@ -39,10 +39,11 @@ These public repositories do not establish availability of the current HnG Group
 - Added `components/legacy-private-launcher/`: historical C# source, project/solution, resources, settings, .gitignore, GPL-3.0 license and archival README. Precompiled executables, PDBs, zip, unzip utility and Visual Studio `.vs`/SQLite state were excluded.
 - The recursive Git tree at consolidation commit `f2aec9c812d57a59ad035d6a3d8fb61a46f44152` contained 313 entries, including 50 component-directory entries (41 files and 9 directories).
 - Each addition was committed on `audit/consolidate-hng-sources`; no changes were force-pushed to the upstream authors' repositories.
-- Validation: the GitHub Actions audit workflow passed on Node 18 (run [38681435040](https://github.com/StudioSuiri/Heroes-and-Generals-StudioSuiri-Version/actions/runs/38681435040)): HAGCP dependency install, `build:all`, tests and TypeScript lint passed; the imported `hgapi` component's `npm ci` and TypeScript build also passed.
-- A Node 20 test was attempted and failed during install: the legacy `canvas@2.11.0` dependency has no matching prebuilt binary for the Node 20 ABI and the runner lacked native Pixman headers/libraries. The CI matrix is therefore pinned to the verified Node 18 baseline; Node 20 compatibility is not established.
+- One-time source verification passed on Node 18 using a standard GitHub-hosted Ubuntu runner (run [38681435040](https://github.com/StudioSuiri/Heroes-and-Generals-StudioSuiri-Version/actions/runs/38681435040)): HAGCP dependency install, `build:all`, tests and TypeScript lint passed; the imported `hgapi` component's `npm ci` and TypeScript build also passed.
+- A Node 20 test was attempted and failed during install: the legacy `canvas@2.11.0` dependency has no matching prebuilt binary for the Node 20 ABI and the runner lacked native Pixman headers/libraries. Node 20 compatibility is not established.
+- To honor the local-only testing policy, the automatically triggered Actions test workflows have now been removed. No new pushes or pull requests should start those test jobs. Routine validation should be run locally with the commands in the root README.
 
-See [RECONSTRUCTION_MATRIX.md](RECONSTRUCTION_MATRIX.md) for a per-subsystem present/missing table and [hng-audit-validation.yml](../.github/workflows/hng-audit-validation.yml) for the build/test workflow. The CI result validates builds/tests for this source snapshot only; it does not prove modern server compatibility or readiness for public deployment.
+See [RECONSTRUCTION_MATRIX.md](RECONSTRUCTION_MATRIX.md) for a per-subsystem present/missing table. The one-time build/test result validates this source snapshot only; it does not prove modern server compatibility or readiness for public deployment.
 
 ## Consolidation policy
 
@@ -51,4 +52,4 @@ See [RECONSTRUCTION_MATRIX.md](RECONSTRUCTION_MATRIX.md) for a per-subsystem pre
 - Keep each component separately identifiable and independently buildable where possible.
 - Do not copy binary builds, IDE cache, old downloaded game files or private user data.
 - Do not combine proprietary game assets into the MIT/GPL licensing claims.
-- Treat CI green as a source/build baseline only, not proof of modern-client compatibility, security, or production readiness.
+- Treat the one-time green run as a source/build baseline only, not proof of modern-client compatibility, security, or production readiness. Future tests are local by default.

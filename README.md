@@ -4,14 +4,14 @@ This repository consolidates **public, community-authored research and tooling**
 
 ## Status
 
-This is an **initial source consolidation / audit branch**, not a release. The original project is preserved in the repository root. Related sources have been imported into distinct component folders on the `audit/consolidate-hng-sources` branch so provenance, licenses, runtime requirements, and gaps remain visible.
+This is an **initial source consolidation and audit snapshot**, not a release. The original project remains in the repository root; the public `hgapi` source and the historical launcher research source are integrated under `components/`, with provenance and licenses preserved.
 
 ### Components
 
 | Path | Role | Upstream | License observed upstream | Status |
 |---|---|---|---|---|
-| Root packages / `packages/*` | Heroes & Generals Community Project (HAGCP): TypeScript packages, assets/templates, client protocol definitions, TCP socket/protocol tooling, map utilities, and a limited experimental server implementation | [raouldeheer/Heroes-and-Generals-community-project](https://github.com/raouldeheer/Heroes-and-Generals-community-project) | MIT | Historical snapshot; needs build and runtime validation |
-| `components/hgapi/` | Warmap API and service that consumes the HAGCP network client and assets packages | [raouldeheer/hgapi](https://github.com/raouldeheer/hgapi) | MIT | Source, manifests, license and component README imported; build not yet verified |
+| Root packages / `packages/*` | Heroes & Generals Community Project (HAGCP): TypeScript packages, assets/templates, client protocol definitions, TCP socket/protocol tooling, map utilities, and a limited experimental server implementation | [raouldeheer/Heroes-and-Generals-community-project](https://github.com/raouldeheer/Heroes-and-Generals-community-project) | MIT | Historical snapshot; build/tests/lint passed once on Node 18; rerun locally after changes |
+| `components/hgapi/` | Warmap API and service that consumes the HAGCP network client and assets packages | [raouldeheer/hgapi](https://github.com/raouldeheer/hgapi) | MIT | Source, manifests, license and component README imported; TypeScript build passed once on Node 18 |
 | `components/legacy-private-launcher/` | Historical Windows Forms launcher for an old private-server experiment | [l4v4ph0x/priv8hng_sisvalid](https://github.com/l4v4ph0x/priv8hng_sisvalid) | GPL-3.0 | Source-only archival subset imported; binaries/caches excluded; not a modern dedicated server |
 
 ## Important technical distinction
@@ -26,9 +26,10 @@ The warmap API (`components/hgapi`) is a companion API and map/war-state viewer 
 
 - [Initial audit report](docs/INITIAL_AUDIT.md)
 - [Reconstruction readiness matrix](docs/RECONSTRUCTION_MATRIX.md)
-- [GitHub Actions validation workflow](.github/workflows/hng-audit-validation.yml)
 
-The workflow attempts the existing HAGCP build/tests/lint and compiles the imported warmap API using its own lockfile. The historical launcher is intentionally excluded from CI. A workflow definition is not itself evidence of success; consult the Actions run attached to the branch/PR.
+**Local-first testing policy:** routine builds and tests should be run in a local checkout. The automatic GitHub Actions test workflows used for the one-time source verification have been removed so pushes and pull requests do not start remote test jobs. See the audit report for the recorded result and known limitations.
+
+From the repository root, run `npm ci`, `npm run build:all`, `npm test`, and `npm run lint`. For the imported API, run `cd components/hgapi`, then `npm ci` and `npm run build`. These commands are instructions for local validation, not a claim that every runtime integration has been verified.
 
 ## Upstream repositories and provenance
 
@@ -46,8 +47,8 @@ The component directories retain their own license files. Copyright notices and 
 
 1. The HAGCP snapshot is a multi-package TypeScript/npm workspace. It includes protocol `.proto` files, packet parsers/linking code, asset/template data, map conversion/rendering utilities, scripts and tests. Last observed upstream commit in this fork: `0e0ce4de7ef5919b14bc007f22384092d2fdf313` (2023-12-14).
 2. The hgapi snapshot is a Node/TypeScript Express service with warmap, battle, player and static information endpoints and WebSocket support. Its client attempts to read `http://game.heroesandgenerals.com/status` and `settings.js`, i.e. historical official endpoints that may no longer exist.
-3. The legacy launcher contains old compiled binaries, PDBs, archives and Visual Studio cache files in its original tree. The consolidated archival component intentionally excludes those generated artifacts and keeps source/configuration files only.
-4. No reproducible build/test result has been claimed yet. Dependency versions are old and should be checked in an isolated environment before executing code.
+3. The legacy launcher contains old compiled binaries, PDBs, archives and Visual Studio cache files upstream. The consolidated archival component excludes those generated artifacts and retains source/configuration only; some referenced resources remain intentionally absent.
+4. A one-time Node 18 source verification passed the HAGCP build/tests/lint and the hgapi TypeScript build. This is a baseline for these sources, not proof of live-server compatibility. Dependency versions are old and changes should be validated locally in an isolated environment.
 5. A private instance requires a compatible implementation of login/account services, player persistence/progression, matchmaking, battle orchestration and game-server simulation. This source set does not establish that all those pieces are present.
 
 ## Recommended next steps
