@@ -63,6 +63,10 @@ Controls: WASD or arrows to move, mouse to aim, left mouse button to fire, Escap
 
 See PROTOCOL_V1.md. Protocol v1 is a compact, explicit binary UDP format that avoids the original game's private protocol. It is currently a development-only LAN protocol: no authentication, encryption, proper reliability/congestion control, public-hosting hardening or anti-cheat exists. Do not port-forward it or expose it to the public internet.
 
+## Architecture/dependency decisions
+
+See [docs/CODE_CATALOG.md](../docs/CODE_CATALOG.md), [docs/REUSE_AND_REWRITE_AUDIT.md](../docs/REUSE_AND_REWRITE_AUDIT.md), [docs/DEPENDENCY_DECISIONS.md](../docs/DEPENDENCY_DECISIONS.md), and [docs/TECH_DEBT_REGISTER.md](../docs/TECH_DEBT_REGISTER.md) for what stays in the native path, what is archival-only, and which renderer/transport/physics libraries are candidates. ENet, bgfx, SDL_GPU and Jolt are **not integrated yet**; local validation of the current C++ source comes first.
+
 ## Relationship to the legacy repositories
 
 The original HAGCP packages, components/hgapi, and historical launcher remain available as separately documented research material. They are not runtime dependencies of hng-client or hng-server. The native implementation should not inherit the old Flash interface, legacy client updater, historical HQ endpoints, or protocols just because their sources are present in the same monorepo.
