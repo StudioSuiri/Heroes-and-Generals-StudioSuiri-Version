@@ -21,7 +21,7 @@ export function player(app: Express, config: APIConfig) {
         checkService(client);
         if (req.query.id) {
             const id = String(req.query.id);
-            if (/^\-\d+$/.test(id)) {
+            if (/^-\d+$/.test(id)) {
                 const gamertag = await idToGamertag(id);
                 if (gamertag) {
                     const result: Packets.SearchPlayerDetailResponse = await client.sendClassAsync(PacketClass.SearchPlayerDetailRequest, {
