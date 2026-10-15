@@ -1,0 +1,57 @@
+name: HnG source audit validation
+
+on:
+  push:
+    branches:
+      - audit/consolidate-hng-sources
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  hagcp:
+    name: HAGCP build and tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+      - name: Install root workspace dependencies
+        run: npm install
+      - name: Build HAGCP packages
+        run: npm run build:all
+      - name: Run HAGCP tests
+        run: npm test
+      - name: Lint TypeScript
+        run: npm run lint
+
+  hgapi:
+    name: Warmap API build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: components/hgapi
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: components/hgapi/package-lock.json
+      - name: Install API dependencies
+        run: npm ci
+      - name: Compile API
+        run: npm run build
+
+# The legacy Windows Forms launcher is intentionally archival-only:
+# its original tree contained stale binaries, an external updater and omitted assets.
+# Do not execute or build that component in CI.
