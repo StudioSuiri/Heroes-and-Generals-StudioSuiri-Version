@@ -22,6 +22,14 @@ The warmap API (`components/hgapi`) is a companion API and map/war-state viewer 
 
 **Nothing in this monorepo proves that the private Patreon-maintained modern server source is included.** We must not claim compatibility with current HnG Group servers until tested against the exact client/server version and with permission from the maintainers where required.
 
+## Audit and validation
+
+- [Initial audit report](docs/INITIAL_AUDIT.md)
+- [Reconstruction readiness matrix](docs/RECONSTRUCTION_MATRIX.md)
+- [GitHub Actions validation workflow](.github/workflows/hng-audit-validation.yml)
+
+The workflow attempts the existing HAGCP build/tests/lint and compiles the imported warmap API using its own lockfile. The historical launcher is intentionally excluded from CI. A workflow definition is not itself evidence of success; consult the Actions run attached to the branch/PR.
+
 ## Upstream repositories and provenance
 
 - [HAGCP upstream](https://github.com/raouldeheer/Heroes-and-Generals-community-project)
