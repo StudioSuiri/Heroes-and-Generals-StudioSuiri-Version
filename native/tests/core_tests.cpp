@@ -40,6 +40,18 @@ void packet_roundtrip_and_validation() {
   require(!hng::decode_packet(bad_type), "unknown message type must reject");
   auto bad_length = bytes; bad_length[6] = 255;
   require(!hng::decode_packet(bad_length), "mismatched payload length must reject");
+  const std::vector<std::uint8_t> one_byte_payload{7};
+  require(hng::encode_packet(hng::PacketType::Hello, 0, 0, one_byte_payload).empty(),
+      "Hello must not accept a payload");
+  require(hng::encode_packet(hng::PacketType::Goodbye, 0, 1, one_byte_payload).empty(),
+      "Goodbye must not accept a payload");
+  require(hng::encode_packet(hng::PacketType::Input, 1, 1, one_byte_payload).empty(),
+      "Input must have its fixed payload shape");
+  const auto hello = hng::encode_packet(hng::PacketType::Hello, 0, 0);
+  auto malformed_hello = hello;
+  malformed_hello.push_back(7);
+  malformed_hello[6] = 1;
+  require(!hng::decode_packet(malformed_hello), "decoder must reject a Hello with unexpected payload bytes");
   const std::vector<std::uint8_t> short_packet{1, 2, 3};
   require(!hng::decode_packet(short_packet), "short packet must reject");
   const std::vector<std::uint8_t> large(hng::kMaxDatagramBytes + 1, 0);

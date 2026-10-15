@@ -36,7 +36,7 @@ Recommended end-state:
 ## 2. GOOD IDEA, BUT IMPROVE IT
 
 ### Protocol framing and serialization
-The native codec does several things correctly: explicit little-endian fields, a version byte, a magic value, explicit payload lengths, a datagram cap, and no raw struct serialization. That is a reasonable tiny prototype format.
+The native codec does several things correctly: explicit little-endian fields, a version byte, a magic value, explicit payload lengths, a datagram cap, per-message payload-shape validation, and no raw struct serialization. That is a reasonable tiny prototype format.
 
 Improve before expanding:
 - add tests for every malformed length, invalid type, maximum player count, invalid coordinates, and unknown version;

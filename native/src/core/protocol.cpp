@@ -27,10 +27,30 @@ std::uint32_t read_u32(std::span<const std::uint8_t> b, std::size_t o) {
     (static_cast<std::uint32_t>(b[o + 2]) << 16U) | (static_cast<std::uint32_t>(b[o + 3]) << 24U);
 }
 bool known_type(std::uint8_t v) { return v >= 1 && v <= 5; }
+
+bool valid_payload_shape(PacketType type, std::span<const std::uint8_t> payload) {
+  switch (type) {
+    case PacketType::Hello:
+    case PacketType::Goodbye:
+      return payload.empty();
+    case PacketType::Welcome:
+      return payload.size() == 5;
+    case PacketType::Input:
+      return payload.size() == 7;
+    case PacketType::Snapshot: {
+      if (payload.size() < 7) return false;
+      const auto player_count = payload[6];
+      return player_count <= kMaxPlayers &&
+        payload.size() == 7 + static_cast<std::size_t>(player_count) * 14;
+    }
+  }
+  return false;
+}
 }
 std::vector<std::uint8_t> encode_packet(PacketType type, std::uint32_t sequence,
     std::uint32_t client_id, std::span<const std::uint8_t> payload) {
-  if (!known_type(static_cast<std::uint8_t>(type)) || payload.size() > kMaxPayloadBytes) return {};
+  if (!known_type(static_cast<std::uint8_t>(type)) ||
+      payload.size() > kMaxPayloadBytes || !valid_payload_shape(type, payload)) return {};
   std::vector<std::uint8_t> b; b.reserve(kPacketHeaderBytes + payload.size());
   b.insert(b.end(), std::begin(kMagic), std::end(kMagic)); b.push_back(kProtocolVersion);
   b.push_back(static_cast<std::uint8_t>(type)); append_u16(b, static_cast<std::uint16_t>(payload.size()));
@@ -43,8 +63,11 @@ std::optional<Packet> decode_packet(std::span<const std::uint8_t> b) {
   if (b[4] != kProtocolVersion || !known_type(b[5])) return std::nullopt;
   const auto size = read_u16(b, 6);
   if (size > kMaxPayloadBytes || b.size() != kPacketHeaderBytes + size) return std::nullopt;
-  Packet p; p.type = static_cast<PacketType>(b[5]); p.sequence = read_u32(b, 8); p.client_id = read_u32(b, 12);
-  p.payload.assign(b.begin() + static_cast<std::ptrdiff_t>(kPacketHeaderBytes), b.end()); return p;
+  const auto type = static_cast<PacketType>(b[5]);
+  const auto payload = b.subspan(kPacketHeaderBytes);
+  if (!valid_payload_shape(type, payload)) return std::nullopt;
+  Packet p; p.type = type; p.sequence = read_u32(b, 8); p.client_id = read_u32(b, 12);
+  p.payload.assign(payload.begin(), payload.end()); return p;
 }
 std::vector<std::uint8_t> encode_input_payload(const ClientInput& i) {
   std::vector<std::uint8_t> p; p.reserve(7);

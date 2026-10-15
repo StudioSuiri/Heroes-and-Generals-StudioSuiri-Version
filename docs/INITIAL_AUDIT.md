@@ -88,7 +88,7 @@ A second static source review now records what is indispensable, what should be 
 - [Dependency decisions](DEPENDENCY_DECISIONS.md)
 - [Technical debt register](TECH_DEBT_REGISTER.md)
 
-The native client now ignores older out-of-order snapshots (UDP may reorder datagrams) and marks the connection stale after five seconds without a valid server packet. This is a small robustness improvement only; reconnection/session identity still needs a proper design. The combat test fixture's positions were adjusted by static reasoning so target distance is within the prototype hitscan range. Neither code change has been executed or validated locally in this session.
+The native protocol codec now validates payload shape by message type; the client and server share wrap-safe sequence-number comparison, the client ignores older out-of-order snapshots (UDP may reorder datagrams), and it marks the connection stale after five seconds without a valid server packet. This is a small robustness improvement only; reconnection/session identity still needs a proper design. The combat test fixture's positions were adjusted by static reasoning so target distance is within the prototype hitscan range. More malformed-message and sequence wrap-around assertions were added to the local test source. Neither code change has been executed or validated locally in this session.
 
 The archival hgapi package script was corrected: the misleading `post-deploy` script was removed, and its nonexistent test suite now exits nonzero with an explicit message. This is not a new test failure; it exposes that no automated test suite exists. The changed package metadata has not yet been exercised with local npm commands.
 

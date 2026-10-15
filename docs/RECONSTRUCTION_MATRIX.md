@@ -8,6 +8,7 @@ This matrix separates evidence in the public forks from assumptions about the mo
 
 | Subsystem | Public evidence | Status | Assessment / next work |
 |---|---|---|---|
+| Native packet-codec hardening | `native/src/core/protocol.cpp`, `native/tests/core_tests.cpp` | Source added; tests unrun | Shared codec enforces the payload shape for Hello/Goodbye/Welcome/Input/Snapshot, and test source covers malformed shape and wrap-safe sequence logic. Validate locally before marking green. |
 | Clean-room native prototype | native/CMakeLists.txt, native/src/core, native/src/client and native/src/server | Source scaffold present; not yet compiled/tested | Independent C++20/SDL3 client and headless UDP server, separate from historical runtime. Follow docs/NODE_AGENT_HANDOFF.md and validate locally before expanding. |
 | Code catalog | `docs/CODE_CATALOG.md` | Documented | Maps native source, legacy TypeScript packages and the historical API/launcher to their purpose and reuse boundary. |
 | Reuse/rewrite/removal audit | `docs/REUSE_AND_REWRITE_AUDIT.md` | Documented | Identifies indispensable research, code to keep/adapt, archival-only components, known unsafe legacy code, and modern library candidates. No candidate is integrated without a local trial. |
