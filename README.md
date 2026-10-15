@@ -11,7 +11,7 @@ This is an **initial source consolidation and audit snapshot**, not a release. T
 | Path | Role | Upstream | License observed upstream | Status |
 |---|---|---|---|---|
 | Root packages / `packages/*` | Heroes & Generals Community Project (HAGCP): TypeScript packages, assets/templates, client protocol definitions, TCP socket/protocol tooling, map utilities, and a limited experimental server implementation | [raouldeheer/Heroes-and-Generals-community-project](https://github.com/raouldeheer/Heroes-and-Generals-community-project) | MIT | Historical snapshot; build/tests/lint passed once on Node 18; rerun locally after changes |
-| `components/hgapi/` | Warmap API and service that consumes the HAGCP network client and assets packages | [raouldeheer/hgapi](https://github.com/raouldeheer/hgapi) | MIT | Source, manifests, license and component README imported; TypeScript build passed once on Node 18 |
+| `components/hgapi/` | Historical Warmap API reference | [raouldeheer/hgapi](https://github.com/raouldeheer/hgapi) | MIT | Source/license preserved; one historical Node 18 build passed; no test suite exists; intentionally not in native runtime |
 | `components/legacy-private-launcher/` | Historical Windows Forms launcher for an old private-server experiment | [l4v4ph0x/priv8hng_sisvalid](https://github.com/l4v4ph0x/priv8hng_sisvalid) | GPL-3.0 | Source-only archival subset imported; binaries/caches excluded; not a modern dedicated server |
 
 ## Important technical distinction
@@ -32,6 +32,10 @@ The active implementation target is HnG Native: a shared C++20 gameplay/protocol
 - Native source and local builds: native/README.md
 - Dependency setup guide (local, opt-in): docs/DEPENDENCY_SETUP.md
 - Protocol v1: native/PROTOCOL_V1.md
+- File-by-file component catalog: docs/CODE_CATALOG.md
+- Reuse/rewrite/remove audit: docs/REUSE_AND_REWRITE_AUDIT.md
+- Dependency decisions and library candidates: docs/DEPENDENCY_DECISIONS.md
+- Technical debt register: docs/TECH_DEBT_REGISTER.md
 - Local-only testing policy: docs/LOCAL_TESTING_POLICY.md
 - Windows/Linux agent handoff: docs/NODE_AGENT_HANDOFF.md
 
@@ -41,8 +45,11 @@ Phase-0 source scaffold now includes a UDP protocol codec, server-authoritative 
 
 - [Initial audit report](docs/INITIAL_AUDIT.md)
 - [Reconstruction readiness matrix](docs/RECONSTRUCTION_MATRIX.md)
+- [Reuse / rewrite / remove audit](docs/REUSE_AND_REWRITE_AUDIT.md)
+- [Dependency decision record](docs/DEPENDENCY_DECISIONS.md)
+- [Technical debt register](docs/TECH_DEBT_REGISTER.md)
 
-**Local-first testing policy:** routine builds and tests should be run in a local checkout. All GitHub Actions workflow files have been removed from this research fork so pushes, pull requests and manual dispatches do not start hosted jobs or publish packages. Routine builds and tests are local-only by default. See the audit report for the one-time verification result and known limitations.
+**Local-first testing policy:** routine builds and tests must be run in a local checkout. All GitHub Actions workflow files have been removed from this research fork so pushes, pull requests and manual dispatches do not start hosted jobs or publish packages. Routine builds and tests are local-only by default. See the audit report for the one-time verification result and known limitations.
 
 From the repository root, run `npm ci`, `npm run build:all`, `npm test`, and `npm run lint`. For the imported API, run `cd components/hgapi`, then `npm ci` and `npm run build`. These commands are instructions for local validation, not a claim that every runtime integration has been verified.
 

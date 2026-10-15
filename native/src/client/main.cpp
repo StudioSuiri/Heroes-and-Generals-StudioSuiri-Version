@@ -25,7 +25,8 @@ const hng::PlayerSnapshot* find_player(const hng::WorldSnapshot& state, std::uin
   return it == state.players.end() ? nullptr : &*it;
 }
 bool sequence_is_newer(std::uint32_t incoming, std::uint32_t previous) {
-  return incoming != previous && static_cast<std::int32_t>(incoming - previous) > 0;
+  const std::uint32_t distance = incoming - previous;
+  return distance != 0U && distance < 0x80000000U;
 }
 void fill_rect(SDL_Renderer* renderer, float x, float y, float w, float h,
                Uint8 r, Uint8 g, Uint8 b) {

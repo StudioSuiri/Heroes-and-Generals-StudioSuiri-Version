@@ -31,6 +31,10 @@ void packet_roundtrip_and_validation() {
   require(!hng::decode_packet(bad_magic), "bad magic must reject");
   auto bad_version = bytes; bad_version[4] = 99;
   require(!hng::decode_packet(bad_version), "unknown version must reject");
+  auto bad_type = bytes; bad_type[5] = 99;
+  require(!hng::decode_packet(bad_type), "unknown message type must reject");
+  auto bad_length = bytes; bad_length[6] = 255;
+  require(!hng::decode_packet(bad_length), "mismatched payload length must reject");
   const std::vector<std::uint8_t> short_packet{1, 2, 3};
   require(!hng::decode_packet(short_packet), "short packet must reject");
   const std::vector<std::uint8_t> large(hng::kMaxDatagramBytes + 1, 0);

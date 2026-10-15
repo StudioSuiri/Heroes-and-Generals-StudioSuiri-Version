@@ -32,8 +32,9 @@ struct Peer {
   bool has_input_sequence{};
   Clock::time_point last_seen{Clock::now()};
 };
-bool sequence_is_newer(std::uint32_t a, std::uint32_t b) {
-  return a != b && static_cast<std::int32_t>(a - b) > 0;
+bool sequence_is_newer(std::uint32_t incoming, std::uint32_t previous) {
+  const std::uint32_t distance = incoming - previous;
+  return distance != 0U && distance < 0x80000000U;
 }
 void send_welcome(hng::UdpSocket& socket, const Peer& peer) {
   const hng::WelcomeInfo info{

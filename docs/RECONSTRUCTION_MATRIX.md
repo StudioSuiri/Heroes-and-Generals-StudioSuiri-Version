@@ -9,6 +9,11 @@ This matrix separates evidence in the public forks from assumptions about the mo
 | Subsystem | Public evidence | Status | Assessment / next work |
 |---|---|---|---|
 | Clean-room native prototype | native/CMakeLists.txt, native/src/core, native/src/client and native/src/server | Source scaffold present; not yet compiled/tested | Independent C++20/SDL3 client and headless UDP server, separate from historical runtime. Follow docs/NODE_AGENT_HANDOFF.md and validate locally before expanding. |
+| Code catalog | `docs/CODE_CATALOG.md` | Documented | Maps native source, legacy TypeScript packages and the historical API/launcher to their purpose and reuse boundary. |
+| Reuse/rewrite/removal audit | `docs/REUSE_AND_REWRITE_AUDIT.md` | Documented | Identifies indispensable research, code to keep/adapt, archival-only components, known unsafe legacy code, and modern library candidates. No candidate is integrated without a local trial. |
+| Dependency decision record | `docs/DEPENDENCY_DECISIONS.md` | Documented | SDL3 remains active; renderer and network transport are explicit trials; Jolt/SQLite/ImGui/audio additions are staged by need. |
+| Native technical debt | `docs/TECH_DEBT_REGISTER.md` | Static review; native target unbuilt | Tracks transport security, test fixture, renderer, collision, timing, and session risks with local acceptance criteria. |
+| Legacy API test script | `components/hgapi/package.json` | Corrected in source; local check pending | No test suite exists. `npm test` now exits nonzero to avoid a false green, and the `post-deploy` helper was removed. |
 | Network packet schema and parsers | `packages/hagcp-network-client/src/protos/*.proto`, protocol classes and linking code | Present, historical | Strong research foundation. Add packet fixtures and version-tag the protocol assumptions. |
 | TCP client transport | `packages/hagcp-network-client/src/client.ts`, `socket.ts` | Present, historical | Depends on old HQ discovery/settings endpoints. Put endpoint configuration behind an adapter and test against captured fixtures, not the live public internet. |
 | Experimental TCP server | `packages/hagcp-network-client/src/server.ts` | Present, incomplete | Explicit testing-only login; uses `password = username`, hard-coded/synthetic account state and stubbed handlers. Not safe or complete enough for internet deployment. |

@@ -78,3 +78,18 @@ The initial native scaffold adds packet framing/validation, a simple world snaps
 Collision/cover, first-person camera, ammunition/reload, weapon data, objective modes and match timers, spawn selection/tickets, vehicles, native campaign map, assault teams, profiles/persistence, progression/economy, sound/animation, secure authentication, anti-cheat and public-hosting hardening.
 
 See [NATIVE_DESIGN.md](NATIVE_DESIGN.md), [MECHANICS_CATALOG.md](MECHANICS_CATALOG.md), [REBUILD_ROADMAP.md](REBUILD_ROADMAP.md), [DEPENDENCY_SETUP.md](DEPENDENCY_SETUP.md), and [NODE_AGENT_HANDOFF.md](NODE_AGENT_HANDOFF.md) for design, mechanics, setup and acceptance path.
+
+
+## Reuse/rewrite/remove audit — 2026-10-15
+
+A second static source review now records what is indispensable, what should be improved, what must remain archival-only, and where a mature library can replace home-grown infrastructure:
+- [File-by-file code catalog](CODE_CATALOG.md)
+- [Reuse, rewrite and removal audit](REUSE_AND_REWRITE_AUDIT.md)
+- [Dependency decisions](DEPENDENCY_DECISIONS.md)
+- [Technical debt register](TECH_DEBT_REGISTER.md)
+
+The native client now ignores older out-of-order snapshots (UDP may reorder datagrams) and marks the connection stale after five seconds without a valid server packet. This is a small robustness improvement only; reconnection/session identity still needs a proper design. The combat test fixture's positions were adjusted by static reasoning so target distance is within the prototype hitscan range. Neither code change has been executed or validated locally in this session.
+
+The archival hgapi package script was corrected: the misleading `post-deploy` script was removed, and its nonexistent test suite now exits nonzero with an explicit message. This is not a new test failure; it exposes that no automated test suite exists. The changed package metadata has not yet been exercised with local npm commands.
+
+Library decisions deliberately remain staged: keep SDL3; trial ENet for transport and bgfx versus SDL_GPU for rendering; defer Jolt, SQLite, Dear ImGui and audio additions until their gameplay need exists. All local builds/tests must follow LOCAL_TESTING_POLICY.md. No hosted workflows were added or executed.

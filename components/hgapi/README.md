@@ -6,12 +6,16 @@ This directory contains the source of the public [raouldeheer/hgapi](https://git
 
 A Node.js / TypeScript HTTP API and WebSocket service for accessing / presenting Heroes & Generals strategic war-map state, battle/player information and static game data. It uses Express and imports HAGCP client/assets/utilities packages through npm package names.
 
+## Status in the unified project
+
+This component is archival/reference-only for the new native client/server. Its Express/WebSocket endpoints, published HAGCP package dependencies and historical HQ client are not linked into `native/`. Do not add it as a dependency of the native game.
+
 ## Important limitations
 
 - This is a **warmap/API service**, not a complete authoritative FPS battle server.
 - The imported historical `src/client.ts` calls the original `http://game.heroesandgenerals.com/status` and `settings.js` endpoints via HAGCP's `Client.connectToHQ`. Those endpoints are historical and may be unavailable; no present-day compatibility is implied.
 - The service's `/status` route returns 503 if the optional HQ client is not connected.
-- The repository has a placeholder test script that exits with an error; don't treat `npm test` returning as a test suite.
+- No automated test suite is implemented. The `npm test` command deliberately exits nonzero to make that gap explicit; a nonzero result here means tests are absent, not that a test suite ran and failed.
 - This snapshot is historical. Validate current Node / TypeScript compatibility in an isolated environment.
 
 ## Project files
