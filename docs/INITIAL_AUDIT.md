@@ -44,7 +44,7 @@ These public repositories do not establish availability of the current HnG Group
 - To honor the local-only testing policy, all GitHub Actions workflow files have now been removed from both `main` and the consolidation branch, including the inherited manual package-publishing workflow. Future pushes, pull requests and manual dispatches from this repository therefore cannot start those repository workflows. Routine validation should be run locally with the commands in the root README.
 - GitHub showed 31 historical workflow runs during this cleanup; all had completed and none remained queued or active. A portion of the earlier failures were caused by the retired `actions/cache@v2.1.7`, lint findings fixed during the audit, and the Node 20 native `canvas` dependency issue. The source baseline passed on Node 18 as recorded above.
 
-See [RECONSTRUCTION_MATRIX.md](RECONSTRUCTION_MATRIX.md) for a per-subsystem present/missing table. The one-time build/test result validates this source snapshot only; it does not prove modern server compatibility or readiness for public deployment.
+See [RECONSTRUCTION_MATRIX.md](RECONSTRUCTION_MATRIX.md) for a per-subsystem present/missing table and [LOCAL_TESTING_POLICY.md](LOCAL_TESTING_POLICY.md) for the local-only validation rules. The one-time build/test result validates that historical source snapshot only; it does not prove modern server compatibility or readiness for public deployment.
 
 ## Consolidation policy
 
@@ -77,4 +77,4 @@ The initial native scaffold adds packet framing/validation, a simple world snaps
 ### What remains out of scope
 Collision/cover, first-person camera, ammunition/reload, weapon data, objective modes and match timers, spawn selection/tickets, vehicles, native campaign map, assault teams, profiles/persistence, progression/economy, sound/animation, secure authentication, anti-cheat and public-hosting hardening.
 
-See [NATIVE_DESIGN.md](NATIVE_DESIGN.md), [MECHANICS_CATALOG.md](MECHANICS_CATALOG.md), [REBUILD_ROADMAP.md](REBUILD_ROADMAP.md), and [NODE_AGENT_HANDOFF.md](NODE_AGENT_HANDOFF.md) for design, mechanics and acceptance path.
+See [NATIVE_DESIGN.md](NATIVE_DESIGN.md), [MECHANICS_CATALOG.md](MECHANICS_CATALOG.md), [REBUILD_ROADMAP.md](REBUILD_ROADMAP.md), [DEPENDENCY_SETUP.md](DEPENDENCY_SETUP.md), and [NODE_AGENT_HANDOFF.md](NODE_AGENT_HANDOFF.md) for design, mechanics, setup and acceptance path.
