@@ -16,6 +16,8 @@ Important: the new native scaffold has not been compiled or executed during this
 
 ## Dependencies
 
+See [docs/DEPENDENCY_SETUP.md](../docs/DEPENDENCY_SETUP.md) for the opt-in local package setup guide. The dependency helper prints a plan by default and only installs packages when explicitly passed an install flag.
+
 - C++20 compiler: GCC 12+ or Clang 15+ on Linux as initial expected baselines; Visual Studio 2022 with Desktop development with C++ on Windows.
 - CMake 3.25+.
 - Ninja on Linux; Visual Studio's generator on Windows.

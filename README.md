@@ -30,6 +30,7 @@ The active implementation target is HnG Native: a shared C++20 gameplay/protocol
 - Historical mechanics and simplification map: docs/MECHANICS_CATALOG.md
 - Ordered implementation roadmap: docs/REBUILD_ROADMAP.md
 - Native source and local builds: native/README.md
+- Dependency setup guide (local, opt-in): docs/DEPENDENCY_SETUP.md
 - Protocol v1: native/PROTOCOL_V1.md
 - Local-only testing policy: docs/LOCAL_TESTING_POLICY.md
 - Windows/Linux agent handoff: docs/NODE_AGENT_HANDOFF.md

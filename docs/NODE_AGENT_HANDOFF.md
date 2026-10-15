@@ -28,7 +28,7 @@ Save the SHA and command output locally, not in source control. The build downlo
 
 ## Linux node — headless server
 
-Requirements: Git, CMake 3.25+, Ninja, GCC/Clang with C++20 and standard build tools. The server-only build requires no SDL or display server.
+Requirements: Git, CMake 3.25+, Ninja, GCC/Clang with C++20 and standard build tools. The server-only build requires no SDL or display server. On Debian/Ubuntu, review the package plan with `./scripts/dev/install-deps-linux.sh --server`; use `--server --install` only after confirming you want those local system packages. Use the `--client` profile for optional SDL3 build prerequisites. See [DEPENDENCY_SETUP.md](DEPENDENCY_SETUP.md).
 
 ~~~bash
 git clone https://github.com/StudioSuiri/Heroes-and-Generals-StudioSuiri-Version.git ~/dev/hng-native
