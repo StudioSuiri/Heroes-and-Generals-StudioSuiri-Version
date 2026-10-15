@@ -72,16 +72,33 @@ void combat_hit_and_capacity() {
   hng::Simulation sim;
   const auto attacker = sim.add_player(), target = sim.add_player();
   require(attacker && target, "two players join");
-  hng::ClientInput a; a.move_x = 1; a.aim_x = 32767;
-  hng::ClientInput t; t.move_y = -1; t.aim_x = -32767;
-  sim.set_input(attacker, a); sim.set_input(target, t);
-  for (int i = 0; i < 17; ++i) sim.tick(1.0F / 30.0F);
-  t.move_y = 0; t.move_x = -1; sim.set_input(target, t);
-  for (int i = 0; i < 80; ++i) sim.tick(1.0F / 30.0F);
+
+  // Deliberately put the two factions within the prototype rifle's test range.
+  // The previous scenario stopped the target hundreds of units beyond that range,
+  // so its expected damage assertion could never be satisfied.
+  hng::ClientInput attacker_move;
+  attacker_move.move_x = 1;
+  sim.set_input(attacker, attacker_move);
+  for (int i = 0; i < 118; ++i) sim.tick(1.0F / 30.0F);
   sim.set_input(attacker, hng::ClientInput{});
+
+  hng::ClientInput target_move;
+  target_move.move_y = -1;
+  sim.set_input(target, target_move);
+  for (int i = 0; i < 20; ++i) sim.tick(1.0F / 30.0F);
+  target_move.move_y = 0;
+  target_move.move_x = -1;
+  sim.set_input(target, target_move);
+  for (int i = 0; i < 80; ++i) sim.tick(1.0F / 30.0F);
   sim.set_input(target, hng::ClientInput{});
-  a.aim_x = 32767; a.aim_y = 0; a.buttons = hng::kButtonFire;
-  sim.set_input(attacker, a); sim.tick(1.0F / 30.0F);
+
+  hng::ClientInput fire;
+  fire.aim_x = 32767;
+  fire.aim_y = 0;
+  fire.buttons = hng::kButtonFire;
+  sim.set_input(attacker, fire);
+  sim.tick(1.0F / 30.0F);
+
   auto state = sim.snapshot();
   const auto* target_state = by_id(state, target);
   require(target_state != nullptr, "target remains in snapshot");
