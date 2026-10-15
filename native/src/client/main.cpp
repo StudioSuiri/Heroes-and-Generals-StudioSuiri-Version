@@ -24,6 +24,9 @@ const hng::PlayerSnapshot* find_player(const hng::WorldSnapshot& state, std::uin
   const auto it = std::find_if(state.players.begin(), state.players.end(), [id](const auto& p) { return p.id == id; });
   return it == state.players.end() ? nullptr : &*it;
 }
+bool sequence_is_newer(std::uint32_t incoming, std::uint32_t previous) {
+  return incoming != previous && static_cast<std::int32_t>(incoming - previous) > 0;
+}
 void fill_rect(SDL_Renderer* renderer, float x, float y, float w, float h,
                Uint8 r, Uint8 g, Uint8 b) {
   SDL_SetRenderDrawColor(renderer, r, g, b, 255);
@@ -75,9 +78,11 @@ int main(int argc, char** argv) {
   std::uint32_t player_id = 0, input_sequence = 0;
   std::uint8_t faction = 0;
   hng::WorldSnapshot world;
+  bool has_snapshot = false;
   auto next_hello = Clock::now();
   auto next_input = Clock::now();
   auto last_title_update = Clock::now();
+  auto last_server_packet = Clock::now();
 
   while (running) {
     SDL_Event event{};
@@ -94,16 +99,37 @@ int main(int argc, char** argv) {
       if (packet->type == hng::PacketType::Welcome && packet->client_id != 0) {
         hng::WelcomeInfo welcome;
         if (hng::decode_welcome_payload(packet->payload, welcome)) {
-          player_id = packet->client_id; faction = welcome.faction; connected = true;
+          if (player_id != packet->client_id) {
+            // A new player ID means a new server session; sequence counters may restart.
+            world = {};
+            has_snapshot = false;
+            input_sequence = 0;
+          }
+          player_id = packet->client_id;
+          faction = welcome.faction;
+          connected = true;
+          last_server_packet = Clock::now();
         }
       } else if (packet->type == hng::PacketType::Snapshot &&
                  (packet->client_id == player_id || player_id == 0)) {
         hng::WorldSnapshot received;
-        if (hng::decode_snapshot_payload(packet->payload, received)) world = std::move(received);
+        if (hng::decode_snapshot_payload(packet->payload, received) &&
+            (!has_snapshot || sequence_is_newer(received.server_tick, world.server_tick))) {
+          // UDP datagrams can be reordered; never roll the rendered state backward.
+          world = std::move(received);
+          has_snapshot = true;
+          last_server_packet = Clock::now();
+        }
       }
     }
 
     const auto now = Clock::now();
+    if (connected && now - last_server_packet > std::chrono::seconds(5)) {
+      connected = false;
+      has_snapshot = false;
+      world = {};
+      std::cerr << "Server heartbeat expired; retrying connection.\n";
+    }
     if (now >= next_hello) {
       const auto hello = hng::encode_packet(hng::PacketType::Hello, 0, 0);
       socket.send_to(*server, hello);
