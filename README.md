@@ -1,43 +1,59 @@
-# Heroes and Generals Community Project — StudioSuiri Audit Fork
+# Heroes & Generals — Community Research Monorepo
 
-This is a fork of [raouldeheer/Heroes-and-Generals-community-project](https://github.com/raouldeheer/Heroes-and-Generals-community-project), a public TypeScript/npm monorepo of community research and tooling for Heroes & Generals.
+This repository consolidates **public, community-authored research and tooling** related to Heroes & Generals. It is not an official Reto-Moto/TLM source release, and it does not contain a verified complete implementation of the modern game backend.
 
-## What is here
+## Status
 
-The upstream tree contains npm workspaces under `packages/*`, including:
-- `hagcp-network-client`: TCP protocol framing, packet parser/linker, protocol schema files and a client used for historical HQ communication; it also contains an experimental server implementation.
-- `hagcp-assets`: serialized template/game-state data and asset files used by client tooling.
-- `hagcp-canvas`: map rendering helpers.
-- `hagcp-utils`: byte and datastore utilities.
-- `hagcp-scripts`: conversion/export and protocol investigation scripts.
-- Tests for network connection and packet parsing.
+This is an **initial source consolidation / audit branch**, not a release. The original project is preserved in the repository root. Related sources have been imported into distinct component folders on the `audit/consolidate-hng-sources` branch so provenance, licenses, runtime requirements, and gaps remain visible.
 
-## Important limitations
+### Components
 
-**This is not the complete source for the modern HnG Group/Sunrise servers.** A client library and protocol schemas do not equal a complete game backend.
+| Path | Role | Upstream | License observed upstream | Status |
+|---|---|---|---|---|
+| Root packages / `packages/*` | Heroes & Generals Community Project (HAGCP): TypeScript packages, assets/templates, client protocol definitions, TCP socket/protocol tooling, map utilities, and a limited experimental server implementation | [raouldeheer/Heroes-and-Generals-community-project](https://github.com/raouldeheer/Heroes-and-Generals-community-project) | MIT | Historical snapshot; needs build and runtime validation |
+| `components/hgapi/` | Warmap API and service that consumes the HAGCP network client and assets packages | [raouldeheer/hgapi](https://github.com/raouldeheer/hgapi) | MIT | Source, manifests, license and component README imported; build not yet verified |
+| `components/legacy-private-launcher/` | Historical Windows Forms launcher for an old private-server experiment | [l4v4ph0x/priv8hng_sisvalid](https://github.com/l4v4ph0x/priv8hng_sisvalid) | GPL-3.0 | Source-only archival subset imported; binaries/caches excluded; not a modern dedicated server |
 
-The source at `packages/hagcp-network-client/src/server.ts` explicitly marks login as testing-only. It assigns `password = username`, returns synthetic player values, and uses placeholder ban/queue/mission logic. Do not expose that experimental server to the public internet or use real credentials. Authentication, persistence, authorization, matchmaking and authoritative battle simulation are not established as complete.
+## Important technical distinction
 
-The network client reads historical endpoints such as `http://game.heroesandgenerals.com/status` and `settings.js`; their current availability is not assumed. The repository has not been verified to build or connect to a currently maintained community server.
+The HAGCP root includes a **network client/protocol model** and a file named `packages/hagcp-network-client/src/server.ts`. That server code explicitly labels authentication as testing-only, derives the password from the username, and contains placeholder/synthetic player data. It must **not** be considered a production-ready backend or exposed to the internet as-is.
 
-## Build / test
+The warmap API (`components/hgapi`) is a companion API and map/war-state viewer service. It is not the complete FPS simulation server. The old `priv8hng_sisvalid` repository is a 2016–2018-era launcher project, not the modern HnG 2023 restoration backend.
 
-This is an old TypeScript/npm workspace (the root manifest says Node >=12). Validate using an isolated checkout and a currently supported Node release. Build dependencies may be old or unavailable.
+**Nothing in this monorepo proves that the private Patreon-maintained modern server source is included.** We must not claim compatibility with current HnG Group servers until tested against the exact client/server version and with permission from the maintainers where required.
 
-```bash
-npm ci
-npm test
-npm run lint
-npm run build:all
-```
+## Audit and validation
 
-These are upstream scripts, not a claim that they all currently pass.
+- [Initial audit report](docs/INITIAL_AUDIT.md)
+- [Reconstruction readiness matrix](docs/RECONSTRUCTION_MATRIX.md)
+- [GitHub Actions validation workflow](.github/workflows/hng-audit-validation.yml)
 
-## Source provenance and license
+The workflow attempts the existing HAGCP build/tests/lint and compiles the imported warmap API using its own lockfile. The historical launcher is intentionally excluded from CI. A workflow definition is not itself evidence of success; consult the Actions run attached to the branch/PR.
 
-- Upstream: https://github.com/raouldeheer/Heroes-and-Generals-community-project
-- MIT license: [LICENSE](./LICENSE)
-- Upstream head observed during audit: `0e0ce4de7ef5919b14bc007f22384092d2fdf313` (2023-12-14)
-- Unified research branch: [HnG source consolidation](https://github.com/StudioSuiri/Heroes-and-Generals-StudioSuiri-Version/tree/audit/consolidate-hng-sources)
+## Upstream repositories and provenance
 
-Source code being MIT-licensed does not automatically grant rights to proprietary game art, names, or other game assets. Review asset provenance and applicable rights before redistributing them.
+- [HAGCP upstream](https://github.com/raouldeheer/Heroes-and-Generals-community-project)
+- [HAGCP MIT license](https://github.com/raouldeheer/Heroes-and-Generals-community-project/blob/main/LICENSE)
+- [hgapi upstream](https://github.com/raouldeheer/hgapi)
+- [hgapi MIT license](https://github.com/raouldeheer/hgapi/blob/main/LICENSE)
+- [Historical private launcher upstream](https://github.com/l4v4ph0x/priv8hng_sisvalid)
+- [GPL-3.0 license text](https://github.com/l4v4ph0x/priv8hng_sisvalid/blob/master/LICENSE)
+- [HnG Group](https://www.hng-group.com/) — separate community restoration and server operator
+
+The component directories retain their own license files. Copyright notices and licensing conditions must be preserved when redistributing or modifying their code. Assets in the HAGCP package may describe or contain game data/artifacts whose rights are distinct from the MIT-licensed source code; do not infer that the MIT license grants rights to proprietary Heroes & Generals artwork or game content.
+
+## Initial audit findings
+
+1. The HAGCP snapshot is a multi-package TypeScript/npm workspace. It includes protocol `.proto` files, packet parsers/linking code, asset/template data, map conversion/rendering utilities, scripts and tests. Last observed upstream commit in this fork: `0e0ce4de7ef5919b14bc007f22384092d2fdf313` (2023-12-14).
+2. The hgapi snapshot is a Node/TypeScript Express service with warmap, battle, player and static information endpoints and WebSocket support. Its client attempts to read `http://game.heroesandgenerals.com/status` and `settings.js`, i.e. historical official endpoints that may no longer exist.
+3. The legacy launcher contains old compiled binaries, PDBs, archives and Visual Studio cache files in its original tree. The consolidated archival component intentionally excludes those generated artifacts and keeps source/configuration files only.
+4. No reproducible build/test result has been claimed yet. Dependency versions are old and should be checked in an isolated environment before executing code.
+5. A private instance requires a compatible implementation of login/account services, player persistence/progression, matchmaking, battle orchestration and game-server simulation. This source set does not establish that all those pieces are present.
+
+## Recommended next steps
+
+1. Finish the source consolidation and keep licenses/provenance at component boundaries.
+2. Inventory dependencies, build scripts, tests, network endpoints and external data assumptions.
+3. Disable/de-risk legacy endpoints before running anything; never use real passwords or expose the experimental server code.
+4. Run isolated builds/tests and record exact failures.
+5. Compare needed services with the publicly documented HnG Group project architecture; ask maintainers before assuming their private backend can be copied or deployed.
