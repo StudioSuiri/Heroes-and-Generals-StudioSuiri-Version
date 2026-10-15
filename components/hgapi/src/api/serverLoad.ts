@@ -26,7 +26,7 @@ export function serverLoad(app: Express, config: APIConfig) {
     endpoint("/queuestats", `public, max-age=${serverloadCacheTime}`, async _ => {
         const data = await cachedServerload();
         if (data) {
-            const factions = new Map<string, Map<String, any[]>>([
+            const factions = new Map<string, Map<string, any[]>>([
                 ["1", new Map],
                 ["2", new Map],
                 ["3", new Map],
@@ -39,7 +39,7 @@ export function serverLoad(app: Express, config: APIConfig) {
 
             data?.waitingTimes.filter((item: { playerTier: number; }) => item.playerTier >= 2)
                 .filter((item: { onlyWarMissions: any; }) => item.onlyWarMissions)
-                .forEach((item: { factionTemplateId: string; characterTemplateId: String; }) => {
+                .forEach((item: { factionTemplateId: string; characterTemplateId: string; }) => {
                     const characterMap = factions.get(item.factionTemplateId) || new Map;
                     const queueList = characterMap.get(item.characterTemplateId) || [];
                     queueList.push(item);
