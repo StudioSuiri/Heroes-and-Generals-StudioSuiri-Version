@@ -5,7 +5,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [main, dev]
+    branches: [main, dev, audit/consolidate-hng-sources]
   pull_request:
     branches: [main, dev]
 
@@ -15,17 +15,17 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [18.x, 20.x]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3.0.0
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
       - name: Cache node modules
-        uses: actions/cache@v2.1.7
+        uses: actions/cache@v4
         env:
           cache-name: cache-node-modules
         with:
@@ -37,9 +37,7 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
 
-      - run: npm i npm@latest -g
-      - run: npm i -ws
-      - run: npm i
+      - run: npm ci
       - name: Test compiling
         run: npm run build:all
 
