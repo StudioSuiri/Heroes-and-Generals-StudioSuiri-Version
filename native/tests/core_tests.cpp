@@ -15,6 +15,11 @@ const hng::PlayerSnapshot* by_id(const hng::WorldSnapshot& state, std::uint32_t 
   return nullptr;
 }
 void packet_roundtrip_and_validation() {
+  require(hng::sequence_is_newer(1U, 0U), "next sequence should be newer");
+  require(!hng::sequence_is_newer(0U, 0U), "equal sequence should not be newer");
+  require(hng::sequence_is_newer(0U, 0xffffffffU), "sequence comparison should handle wrap-around");
+  require(!hng::sequence_is_newer(0xffffffffU, 0U), "pre-wrap old sequence should be rejected");
+  require(!hng::sequence_is_newer(0x80000000U, 0U), "half-range ambiguity should not be treated as newer");
   hng::ClientInput input; input.move_x = -1; input.move_y = 1;
   input.aim_x = -12345; input.aim_y = 23456; input.buttons = hng::kButtonFire;
   const auto payload = hng::encode_input_payload(input);

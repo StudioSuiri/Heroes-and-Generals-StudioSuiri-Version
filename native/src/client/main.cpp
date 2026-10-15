@@ -24,10 +24,6 @@ const hng::PlayerSnapshot* find_player(const hng::WorldSnapshot& state, std::uin
   const auto it = std::find_if(state.players.begin(), state.players.end(), [id](const auto& p) { return p.id == id; });
   return it == state.players.end() ? nullptr : &*it;
 }
-bool sequence_is_newer(std::uint32_t incoming, std::uint32_t previous) {
-  const std::uint32_t distance = incoming - previous;
-  return distance != 0U && distance < 0x80000000U;
-}
 void fill_rect(SDL_Renderer* renderer, float x, float y, float w, float h,
                Uint8 r, Uint8 g, Uint8 b) {
   SDL_SetRenderDrawColor(renderer, r, g, b, 255);
@@ -115,7 +111,7 @@ int main(int argc, char** argv) {
                  (packet->client_id == player_id || player_id == 0)) {
         hng::WorldSnapshot received;
         if (hng::decode_snapshot_payload(packet->payload, received) &&
-            (!has_snapshot || sequence_is_newer(received.server_tick, world.server_tick))) {
+            (!has_snapshot || hng::sequence_is_newer(received.server_tick, world.server_tick))) {
           // UDP datagrams can be reordered; never roll the rendered state backward.
           world = std::move(received);
           has_snapshot = true;

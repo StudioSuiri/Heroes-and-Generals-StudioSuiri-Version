@@ -14,6 +14,12 @@ inline constexpr std::uint16_t kWorldWidth = 1600;
 inline constexpr std::uint16_t kWorldHeight = 900;
 inline constexpr std::uint8_t kButtonFire = 0x01;
 enum class PacketType : std::uint8_t { Hello = 1, Welcome = 2, Input = 3, Snapshot = 4, Goodbye = 5 };
+
+// Serial-number arithmetic with wrap-around; distances >= half the domain are old.
+inline constexpr bool sequence_is_newer(std::uint32_t incoming, std::uint32_t previous) noexcept {
+  const std::uint32_t distance = incoming - previous;
+  return distance != 0U && distance < 0x80000000U;
+}
 struct Packet { PacketType type{}; std::uint32_t sequence{}; std::uint32_t client_id{}; std::vector<std::uint8_t> payload; };
 struct ClientInput { std::int8_t move_x{}; std::int8_t move_y{}; std::int16_t aim_x{32767}; std::int16_t aim_y{}; std::uint8_t buttons{}; };
 struct WelcomeInfo { std::uint8_t faction{}; std::uint16_t world_width{kWorldWidth}; std::uint16_t world_height{kWorldHeight}; };

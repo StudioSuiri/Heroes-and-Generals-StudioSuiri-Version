@@ -32,10 +32,6 @@ struct Peer {
   bool has_input_sequence{};
   Clock::time_point last_seen{Clock::now()};
 };
-bool sequence_is_newer(std::uint32_t incoming, std::uint32_t previous) {
-  const std::uint32_t distance = incoming - previous;
-  return distance != 0U && distance < 0x80000000U;
-}
 void send_welcome(hng::UdpSocket& socket, const Peer& peer) {
   const hng::WelcomeInfo info{
     static_cast<std::uint8_t>((peer.player_id % 2U == 1U) ? 1U : 2U),
@@ -123,7 +119,7 @@ int main(int argc, char** argv) {
         continue;
       }
       if (packet->type == hng::PacketType::Input &&
-          (!it->has_input_sequence || sequence_is_newer(packet->sequence, it->last_input_sequence))) {
+          (!it->has_input_sequence || hng::sequence_is_newer(packet->sequence, it->last_input_sequence))) {
         hng::ClientInput input;
         if (hng::decode_input_payload(packet->payload, input)) {
           simulation.set_input(it->player_id, input);
