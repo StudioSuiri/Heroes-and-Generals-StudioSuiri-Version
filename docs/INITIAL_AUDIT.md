@@ -32,6 +32,15 @@ The old fork contains Visual Studio `.vs` caches and SQLite IDE state, compiled 
 
 These public repositories do not establish availability of the current HnG Group/Sunrise modern server source, a complete dedicated FPS server, a working modern account/progression service, or a private-server package compatible with the modern restored client. The experimental server file is a starting point for protocol study only.
 
+## Consolidation result on branch `audit/consolidate-hng-sources`
+
+- Base selected: HAGCP root repository.
+- Added `components/hgapi/`: 17 TypeScript source files, package manifest/lockfile, tsconfig, PM2 config, .gitignore, MIT license and explanatory README.
+- Added `components/legacy-private-launcher/`: historical C# source, project/solution, resources, settings, .gitignore, GPL-3.0 license and archival README. Precompiled executables, PDBs, zip, unzip utility and Visual Studio `.vs`/SQLite state were excluded.
+- The recursive Git tree at consolidation commit `f2aec9c812d57a59ad035d6a3d8fb61a46f44152` contained 313 entries, including 50 component-directory entries (41 files and 9 directories).
+- Each addition was committed on `audit/consolidate-hng-sources`; no changes were force-pushed to the upstream authors' repositories.
+- Build/tests are not verified: this runtime couldn't resolve `github.com` for a local clone, so no claim of compilation success is made.
+
 ## Consolidation policy
 
 - Preserve original upstream links and commit IDs.
