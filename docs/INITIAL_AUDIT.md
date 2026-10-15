@@ -1,0 +1,42 @@
+# Initial Audit — Heroes & Generals Sources
+
+Date: 2026-10-14
+
+## Repositories examined
+
+| Repository | Forked from | Default branch / latest observed source commit | Files in recursive tree | Finding |
+|---|---|---|---:|---|
+| [Heroes-and-Generals-community-project fork](https://github.com/StudioSuiri/Heroes-and-Generals-StudioSuiri-Version) | [raouldeheer/Heroes-and-Generals-community-project](https://github.com/raouldeheer/Heroes-and-Generals-community-project) | `main`, `0e0ce4de7ef5919b14bc007f22384092d2fdf313`, 2023-12-14 | 236 file blobs | Main base: npm/TypeScript multi-package repository with assets, network protocol/client code and helper scripts. MIT. |
+| [hgapi fork](https://github.com/StudioSuiri/hgapi-StudioSuiri-Version) | [raouldeheer/hgapi](https://github.com/raouldeheer/hgapi) | `main`, `385bb943054a125906ca4494de0066d10197a6e4`, 2024-01-24 | 30 file blobs | Companion Express/TypeScript API and war-map service. MIT. The package depends on published HAGCP packages and historically uses original HnG HQ endpoints. |
+| [priv8hng_sisvalid fork](https://github.com/StudioSuiri/priv8hng_sisvalid-StudioSuiri-Version) | [l4v4ph0x/priv8hng_sisvalid](https://github.com/l4v4ph0x/priv8hng_sisvalid) | `master`, `3d9a3d76a5dc73e3554c851ea559863920c5595e`, 2018-08-26 | 41 file blobs | Historical C# Windows Forms launcher and configuration for an old private-server experiment. GPL-3.0. Not evidence of a modern server implementation. |
+
+## Findings with highest engineering impact
+
+### 1. The root HAGCP repository is the correct base
+
+It has the broadest set of reusable code: protocol definitions and parsers, TCP socket handling, a network client, an experimental `Server` implementation, asset templates, map-data tools and tests. It is therefore the natural monorepo root.
+
+### 2. The API is complementary, not the game server
+
+The hgapi source implements HTTP endpoints and map-related APIs and reads war state through the HAGCP client. It includes route calculation, battle and player endpoints, cache helpers, logging, map export and websocket support. It should live as a separately deployable service, not be confused with the authoritative FPS battle simulation.
+
+### 3. A dangerous experimental server exists — but it is not production-ready
+
+In `packages/hagcp-network-client/src/server.ts`, the code comments explicitly call the login implementation testing-only. It sets `password = username`, emits synthetic player state, returns hard-coded values for ban/queue checks, and contains placeholder logic. This can support protocol research, but it is not safe or feature-complete for public deployment. Never expose it to the internet without replacing authentication, authorization, persistence and request validation.
+
+### 4. Historical launcher requires source-only treatment
+
+The old fork contains Visual Studio `.vs` caches and SQLite IDE state, compiled `.exe` and `.pdb` files, `.zip` bundles, and an old `unzip.exe`. They are excluded from consolidation. The C# source references a hard-coded legacy download host (`35.204.221.98:8080`) and launches `sisvali.exe`; treat its updater/download mechanism as unsafe until independently reviewed. Do not run the historic binaries or download from the hard-coded host.
+
+### 5. What the repositories do not prove
+
+These public repositories do not establish availability of the current HnG Group/Sunrise modern server source, a complete dedicated FPS server, a working modern account/progression service, or a private-server package compatible with the modern restored client. The experimental server file is a starting point for protocol study only.
+
+## Consolidation policy
+
+- Preserve original upstream links and commit IDs.
+- Keep original license text and component attribution.
+- Keep each component separately identifiable and independently buildable where possible.
+- Do not copy binary builds, IDE cache, old downloaded game files or private user data.
+- Do not combine proprietary game assets into the MIT/GPL licensing claims.
+- Do not claim build/test success until it is actually run.
