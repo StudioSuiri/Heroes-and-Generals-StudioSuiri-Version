@@ -76,7 +76,7 @@ export function battles(app: Express, config: APIConfig) {
     });
 
     config.websockets.set("/socket/factionbattles", new Set);
-    // @ts-expect-error
+    // @ts-expect-error — express-ws adds the .ws handler to the Express application type.
     app.ws("/socket/factionbattles", (ws: ws, req: express.Request) => {
         let interval: NodeJS.Timer | undefined;
         const startTime = Date.now();
@@ -132,7 +132,7 @@ export function battles(app: Express, config: APIConfig) {
                         }
                     };
 
-                    let inLoop: boolean = false;
+                    let inLoop = false;
                     interval = setInterval(() => {
                         if (!inLoop) {
                             inLoop = true;
