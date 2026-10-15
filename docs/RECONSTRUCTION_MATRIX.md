@@ -20,7 +20,7 @@ This matrix separates evidence in the public forks from assumptions about the mo
 | Real-time FPS battle simulation / dedicated game server | No complete source established by these three repositories | Missing / unproven | This is the biggest gap. Protocol schemas do not implement physics, weapons, hit validation, replication or game simulation. |
 | Launcher / client bootstrap | Historical 2016–2018 C# Windows Forms launcher | Legacy only | Depends on an old client and hard-coded download host. Some resource files are intentionally omitted; this archival component is not a reproducible build. |
 | Anti-cheat and moderation | No complete implementation established by these forks | Missing / unproven | Required before public operation; use server-side validation and an abuse/reporting model. |
-| Build and automated tests | Network packet/connection tests exist; hgapi test script is a placeholder | One-time Node 18 build/test baseline passed | HAGCP install, build, tests and lint passed once; hgapi compiled once. Automatic test workflows were removed to honor local-only testing. Re-run locally after changes. |
+| Build and automated tests | Network packet/connection tests exist; hgapi test script is a placeholder | One-time Node 18 build/test baseline passed | HAGCP install, build, tests and lint passed once; hgapi compiled once on Node 18. All workflow files were removed so validation and publishing remain local-only by default. Re-run locally after changes. |
 
 ## Can these repositories reconstruct a playable private server?
 

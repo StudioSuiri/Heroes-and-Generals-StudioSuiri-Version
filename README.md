@@ -27,7 +27,7 @@ The warmap API (`components/hgapi`) is a companion API and map/war-state viewer 
 - [Initial audit report](docs/INITIAL_AUDIT.md)
 - [Reconstruction readiness matrix](docs/RECONSTRUCTION_MATRIX.md)
 
-**Local-first testing policy:** routine builds and tests should be run in a local checkout. The automatic GitHub Actions test workflows used for the one-time source verification have been removed so pushes and pull requests do not start remote test jobs. See the audit report for the recorded result and known limitations.
+**Local-first testing policy:** routine builds and tests should be run in a local checkout. All GitHub Actions workflow files have been removed from this research fork so pushes, pull requests and manual dispatches do not start hosted jobs or publish packages. Routine builds and tests are local-only by default. See the audit report for the one-time verification result and known limitations.
 
 From the repository root, run `npm ci`, `npm run build:all`, `npm test`, and `npm run lint`. For the imported API, run `cd components/hgapi`, then `npm ci` and `npm run build`. These commands are instructions for local validation, not a claim that every runtime integration has been verified.
 
